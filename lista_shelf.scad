@@ -2,61 +2,47 @@ extension_length = 100;
 extension_width = 5;
 tooth_width = 15;
 bracket_thickness = 4;
+shelf_thickness = 4;
 tooth_gap = 10;
-shelf_width=50;
-shelf_length=50;
+shelf_width=100;
+shelf_length=100;
 //16mm between the bracket centers
 bracket_center_to_center=16;
 bracket_gap=bracket_center_to_center-bracket_thickness;
-pversion = "0.1a 4mm";
+pversion = "listashelf 0.1a";
 $fn=42;
 
-union(){
+//x_off is where the first tooth hole starts
+x_off = (shelf_width-bracket_center_to_center)/2;
+//y_off is how far from the edge to start the tooth attach
+y_off = 10;
+//based on the mounting bracket design, what the space is between
+//the two vertical teeth(the horizontal space is defined by the 
+//nexus system gap)
+slot_y_space = (extension_length-tooth_width/2-(3*extension_length/5));
+
 difference(){
-translate([shelf_width/4,-shelf_width*2-10,0])
-    cube([100,100,4]);
-union(){
-    translate([3*extension_length/5,-30,-1])
-        cube([bracket_thickness,tooth_width/2,10]);
-    translate([3*extension_length/5,-30-(extension_length-tooth_width/2-(3*extension_length/5)),-1])
-        cube([bracket_thickness,tooth_width/2,10]); 
-    translate([3*extension_length/5+bracket_center_to_center,-30,-1])
-        cube([bracket_thickness,tooth_width/2,10]);
-    translate([3*extension_length/5+bracket_center_to_center,-30-(extension_length-tooth_width/2-(3*extension_length/5)),-1])
-        cube([bracket_thickness,tooth_width/2,10]);      
+    //first create a rectangular prisim that is twice as thick as what we
+    //need so it gets a rim and we will carve a bowl later.
+    translate([0,0,0])
+        cube([shelf_width,shelf_length,shelf_thickness*2]);
+    union(){
+        //carve "bowl"
+        translate([shelf_thickness,shelf_thickness,shelf_thickness+1])
+            cube([shelf_width-2*shelf_thickness,
+                  shelf_length-2*shelf_thickness,shelf_thickness+1]);
+        //these are the four holes for mounting bracket attach
+        translate([x_off,y_off,-1])
+            cube([bracket_thickness,tooth_width/2,shelf_thickness*2]);
+        translate([x_off, y_off+slot_y_space, -1])
+            cube([bracket_thickness,tooth_width/2,shelf_thickness*2]); 
+        translate([x_off+bracket_center_to_center, y_off,-1])
+            cube([bracket_thickness,tooth_width/2,shelf_thickness*2]);
+        translate([x_off+bracket_center_to_center, y_off+slot_y_space,-1])
+            cube([bracket_thickness,tooth_width/2,shelf_thickness*2]);
+        //part number label
+        linear_extrude(shelf_thickness/2){
+            rotate(90)  translate([10, -10, 0]) mirror([0,1,0]) 
+               text(pversion, size=6, font="times");};    
+    }
 }
-
-}
-
-//actual braket template
-linear_extrude(bracket_thickness){
-    square([extension_length, 
-            extension_width]);
-    square([tooth_width, 
-            tooth_width]);
-    translate([tooth_gap*2, 0, 0])
-            square([tooth_width, 
-                    tooth_width*2+tooth_gap]);
-    translate([tooth_width*2+tooth_width/3,0,0]) rotate(45)
-            square([tooth_width/2.1, tooth_width/2.1]);
-    translate([0, tooth_gap+tooth_width,0])
-            square([tooth_width, tooth_width]);
-    translate([0, tooth_gap+tooth_width,0])
-            square([tooth_width*2, extension_width]);};
-            
-                
-// add little nubs to make it usefulish
-linear_extrude(bracket_thickness){
-    translate([3*extension_length/5,
-               -(tooth_width-extension_width)/2,0])
-        square([tooth_width/2, tooth_width]);
-    translate([extension_length-tooth_width/2,
-               -(tooth_width-extension_width)/2,0])
-        square([tooth_width/2, tooth_width]);};
-        
- linear_extrude(bracket_thickness+2){
-    rotate(90) translate([2,-1*tooth_width*2,0]) 
-       text(pversion, size=6, font="times");
-     };
-        
-        }
