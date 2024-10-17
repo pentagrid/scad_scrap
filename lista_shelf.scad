@@ -9,11 +9,11 @@ shelf_length=100;
 //16mm between the bracket centers
 bracket_center_to_center=16;
 bracket_gap=bracket_center_to_center-bracket_thickness;
-pversion = "listashelf 0.1a";
+pversion = "listashelf 0.1b";
 $fn=42;
 
 //x_off is where the first tooth hole starts
-x_off = (shelf_width-bracket_center_to_center)/2;
+x_off = (shelf_width-bracket_center_to_center)/2 - bracket_thickness/2;
 //y_off is how far from the edge to start the tooth attach
 y_off = 10;
 //based on the mounting bracket design, what the space is between
