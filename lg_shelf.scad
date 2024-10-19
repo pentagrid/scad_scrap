@@ -2,19 +2,19 @@ include <lib/chamfer3d.scad>
 
 //HP z34c top is ~29.5mm wide
 //dell is about 36-40mm(beveled
-//lg is about 23/24mm
+//lg is about 23/24mm and has a thinner bezel
 
 //units in mm
-shelf_length = 100; // size of the shelf tray (arbitrary)
-shelf_width = 100; // size of the shelf tray (arbitrary)
+shelf_length = 180; // size of the shelf tray (arbitrary)
+shelf_width = 125; // size of the shelf tray (arbitrary)
 shelf_z = 10; // thickness of the shelf tray
 channel_width = 28; // the gap for the monitor's body(determined via measurement + 4mm)
-channel_height = 17; // the height of the ledges that wrap around the monitor (determined via measurement - 2mm)
+channel_height = 14; // the height of the ledges that wrap around the monitor (determined via measurement - 2mm)
 channel_height_back = channel_height*2;
 ledge_width = 20; // how thick the ledges are
 width = ledge_width*2+channel_width;
 pn_depth = 7; // depth of the part number cut (arbitrary)
-pversion = "lg_shelf 0.1a perek";
+pversion = "lg_shelf 0.1b perek";
 chamfer_radius = 3; // gild the lily
 $fn=42;
 
